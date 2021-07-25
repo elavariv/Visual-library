@@ -10,9 +10,9 @@ const graph = canvas.append('g').attr('transform', `translate(${cent.x},${cent.y
 // and returns an array objects with startAngle and endAngle, etc - one for each data point
 
 const computeAngles = d3.pie() //sets key variables - value, startAngle, etc and returns pie(data) obj
-     .value(d=> d.cost) //sets the "value" variable and returns pie(data)
-     .sort(null) //sets the "sort" variable and returns pie(data) object.
-// computeAngles is the result of d3.pie().value(d=>d.cost).sort(null), which is pie(data)
+     .value(d=> d.cost) //updates the "value" variable and returns pie(data)
+     .sort(null) //updates the "sort" variable and returns pie(data) object.
+// computeAngles is the result of d3.pie().value(d=>d.cost).sort(null), which is pie(data) function
 
 // When value(d=>d.cost) executes. It changes the variable "value", which
 // was holding a generic identify function. Now "value" will have d=>d.cost instead.
@@ -23,7 +23,7 @@ const computeAngles = d3.pie() //sets key variables - value, startAngle, etc and
 
 // pie(data) needs an argument. So, you should pass an arg to invoke the funcion computeAngles.
 // computeAngles(data) is same as d3.pie().value(d=>d.cost).sort(null)(data)
-// This time pie(data) is executed, which returns an array
+// This executes pie(data), which returns an array that has computed angles.
 
 // The main reason for confusion is that JS allows a regular function to behave like an object
 // hence functions can have their own properties and methods. 
@@ -37,11 +37,6 @@ const arcPath = d3.arc()
     .innerRadius(dims.radius/2);
 
 const update = (data) => {
-    //Build a scale to create colors for the pie slices
-    
-    pieColor = d3.scaleOrdinal()
-                .domain(data.map(d=>d.name))
-                .range(d3['schemeSet1'])
     
     //d3.selectAll() executes basic JS to select elements and return Selection$1 object
     //Selection$1 object has methods like, append, attr, enter, exit, etc.
@@ -58,25 +53,11 @@ const update = (data) => {
             .attr('d', d=>arcPath(d)) 
             .attr('stroke', '#fff')
             .attr('stoke-width', 3)
-            .attr('fill', d=>pieColor(d.data.name))//actual data is inside the object called "data"
 
     //attr() takes two arguments. First is always a string, which represents the HTML attribute
     //The second can be a string or a function. If it is a function, attr() method runs a 
     //loop for each data element and applys the provided function. Hence the function we provide
     //is always for individual data point, not for all data points.
-
-    //Update selection when we update the data
-    paths.attr('d', d=>archPath(d))
-
-    //Exit selection when we delete a data in the input
-    paths.exit().remove()
-    
-    //add text
-    paths.enter()
-    .append("text")
-        .text(d=>d.data.name)
-        .attr("x", d=>arcPath.centroid(d)[0])
-        .attr("y", d=>arcPath.centroid(d)[1])
 };
 
 var data = [];
