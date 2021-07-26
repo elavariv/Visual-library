@@ -22,6 +22,7 @@ const arcPath = d3.arc()
     .innerRadius(dims.radius/2);
 
 // Add tool tip - https://cdnjs.com/libraries/d3-tip
+// this works only for d3 v5. With v6 and up, this throws error
 const tip = d3.tip()
     .attr('class', 'tip')
     .html(d => {
