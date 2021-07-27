@@ -44,7 +44,7 @@ const update = (data) => {
     const paths = graph.selectAll('path') 
          .data(computeAngles(data)); 
     //data() returns an object that conatins three sub objects - entry, exit, groups & parents
-
+    console.log(computeAngles(data))
     paths.enter()
         .append('path')
             .attr('class', 'arc')

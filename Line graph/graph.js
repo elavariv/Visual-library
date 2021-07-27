@@ -28,9 +28,12 @@ const xAxisGroup = graph.append('g')
 const yAxisGroup = graph.append('g')
         .attr('class', 'y-axis')
 
-//generate line graph
+//generate line graph. We don't need entry/update/exit pattern
+//Full update pattern is based on the number of data points 
+//circle takes care of that. For additional elements like path, we just do update
 const path = graph.append('path');
-
+//Line generator takes an array of x&y data to generate line.
+//So make sure the input is an array of all data points to be connected by a line
 const computeLineD = d3.line()
     .x(d => xScale(new Date(d.date)))
     .y(d => yScale(d.distance));
@@ -71,8 +74,11 @@ const update = (data) => {
         .attr('text-anchor', 'end');
     //text-anchor changes the point where rotation starts. The Default is center
     
-    //update path data
-    path.data([data])  //path requires the data to be an array of array.
+    //Add line paths. Notice the data is passed as an array of all data points
+    //The reason is we want to compute d using all data points as a whole.
+    //If we pass one data point at a time to the computeLineD() we are telling
+    //that draw line for that one point, which is just a point.
+    path.data([data])  
         .attr('fill', 'none')
         .attr('stroke', '#00bfa5')
         .attr('stroke-width', 2)
