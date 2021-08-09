@@ -35,6 +35,7 @@ const path = graph.append('path');
 //Line generator takes an array of x&y data to generate line.
 //So make sure the input is an array of all data points to be connected by a line
 const computeLineD = d3.line()
+    .curve(d3.curveCardinal)
     .x(d => xScale(new Date(d.date)))
     .y(d => yScale(d.distance));
 
